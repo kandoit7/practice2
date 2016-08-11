@@ -480,11 +480,11 @@ $('.palyback input').change(function() {
   }
   
  if ( leftSong.sourceNode ) {
-	    if (((leftSong.currentPlaybackRate > 0) && (rate < 0)) ||
-	    	((leftSong.currentPlaybackRate < 0) && (rate > 0))	) {
+	    if (((leftSong.currentPlaybackRate > 0) && ($(this).val() < 0)) ||
+	    	((leftSong.currentPlaybackRate < 0) && ($(this).val() > 0))	) {
 	    	if (leftSong.sourceNode) {
-				leftSong.gainNode.gain.setTargetAtTime( 0, now, FADE );
-				leftSong.sourceNode.stop(now + FADE*4);
+				leftSong.gainNode.gain.setTargetAtTime( 0, now, 0.01 );
+				leftSong.sourceNode.stop(now + 0.01*4);
 				leftSong.sourceNode = null;
 				leftSong.gainNode = null;
 	    	}
@@ -501,19 +501,19 @@ $('.palyback input').change(function() {
 	    leftSong.gainNode.gain.value = leftSong.gain;
 	    leftSong.gainNode.connect( leftSong.filter );
 	    sourceNode.connect( leftSong.gainNode );
-	    sourceNode.buffer = (rate>0) ? leftSong.buffer : leftSong.revBuffer;
-	    var startTime = (rate>0) ? leftSong.lastBufferTime : sourceNode.buffer.duration-leftSong.lastBufferTime;
+	    sourceNode.buffer = ($(this).val()>0) ? leftSong.buffer : leftSong.revBuffer;
+	    var startTime = ($(this).val()>0) ? leftSong.lastBufferTime : sourceNode.buffer.duration-leftSong.lastBufferTime;
 	    
-    	sourceNode.playbackRate.setValueAtTime( Math.abs(rate), now );
+    	sourceNode.playbackRate.setValueAtTime( Math.abs($(this).val()), now );
     	var duration = (sourceNode.buffer.duration - startTime);
         leftSong.gainNode.gain.value = 0.0;
-        leftSong.gainNode.gain.setTargetAtTime( leftSong.gain, now, FADE );
+        leftSong.gainNode.gain.setTargetAtTime( leftSong.gain, now, 0.01 );
 		sourceNode.onended = shutDownNodeWhenDonePlaying.bind(sourceNode);
         sourceNode.start( now, startTime, duration );
 	    leftSong.sourceNode = sourceNode;
 	} else  // if I replace "now" with "0" below, Firefox works.
-	    leftSong.sourceNode.playbackRate.setValueAtTime( Math.abs(rate), now );
-    leftSong.currentPlaybackRate = rate;
+	    leftSong.sourceNode.playbackRate.setValueAtTime( Math.abs($(this).val()), now );
+    leftSong.currentPlaybackRate = $(this).val();
 });
 
 //
