@@ -17,6 +17,8 @@ modVolumeRight = 0;
 rateLeft = 1;
 rateRight = 1;
 
+var audioCtx = null;
+
 //
 //left - Right Play
 //
@@ -436,6 +438,84 @@ $('#tutorial-container>p').click(function() {
   $('#tutorial-container').hide();
 });
 
+//playbackRate change
+$('.palyback input').change(function() {
+  if (leftSong != null) {
+  	leftSong.currentTime = $(this).val();
+  }
+  var now = leftSong.currentTime = $(this).val();
+  if(leftSong.lastTimeStamp > now)
+  	return;
+  	
+  leftSong.lastBuffer += (now-leftSong.lastTimeStamp) * leftSong.lastPBR;
+  leftSong.lastPBR = $(this).val();
+  leftSong.lastTimeStamp = now;
+  
+  if(leftSong.lastBufferTime > leftSong.buffer.duration) {
+  	leftSong.sourceNode = null;
+  	leftSong.gainNode = null;
+  	leftSong.lastPBR = leftSong.buffer.duration;
+  	if ( $(this).val() >= 0 )
+  		return;
+  	else
+  		leftSong.lastBufferTime = leftSong.buffer.duration;
+  }
+  if(leftSong.lastBufferTime < 0) {
+  	leftSong.sourceNode = null;
+  	leftSong.gainNode = null;
+  	leftSong.lastPBR = 0;
+  	if ( $(this).val() <= 0 )
+  		return;
+  	else
+  		leftSong.lastBufferTime = 0;
+  }
+  if ( $(this).val() == 0 ) {
+  	if(leftSong.sourceNode) {
+  		leftSong.gainNode.gain.setTargetAtTime(0, now, 0.01);
+  		leftSong.sourceNode.stop(now + 0.1);
+  		leftSong.sourceNode = null;
+  		leftSong.gainNode = null;
+  	}
+  	return;
+  }
+  
+ if ( leftSong.sourceNode ) {
+	    if (((leftSong.currentPlaybackRate > 0) && (rate < 0)) ||
+	    	((leftSong.currentPlaybackRate < 0) && (rate > 0))	) {
+	    	if (leftSong.sourceNode) {
+				leftSong.gainNode.gain.setTargetAtTime( 0, now, FADE );
+				leftSong.sourceNode.stop(now + FADE*4);
+				leftSong.sourceNode = null;
+				leftSong.gainNode = null;
+	    	}
+	    }
+	}
+
+    // so... we may have just killed the sourceNode to flip, or 
+    // we may have been stopped before.  Create the sourceNode,
+    // pointing to the correct direction buffer.
+	if (!leftSong.sourceNode) {
+	    var sourceNode = audioCtx.createBufferSource();
+	    sourceNode.loop = false;
+	    leftSong.gainNode = audioCtx.createGain();
+	    leftSong.gainNode.gain.value = leftSong.gain;
+	    leftSong.gainNode.connect( leftSong.filter );
+	    sourceNode.connect( leftSong.gainNode );
+	    sourceNode.buffer = (rate>0) ? leftSong.buffer : leftSong.revBuffer;
+	    var startTime = (rate>0) ? leftSong.lastBufferTime : sourceNode.buffer.duration-leftSong.lastBufferTime;
+	    
+    	sourceNode.playbackRate.setValueAtTime( Math.abs(rate), now );
+    	var duration = (sourceNode.buffer.duration - startTime);
+        leftSong.gainNode.gain.value = 0.0;
+        leftSong.gainNode.gain.setTargetAtTime( leftSong.gain, now, FADE );
+		sourceNode.onended = shutDownNodeWhenDonePlaying.bind(sourceNode);
+        sourceNode.start( now, startTime, duration );
+	    leftSong.sourceNode = sourceNode;
+	} else  // if I replace "now" with "0" below, Firefox works.
+	    leftSong.sourceNode.playbackRate.setValueAtTime( Math.abs(rate), now );
+    leftSong.currentPlaybackRate = rate;
+    }
+});
 
 //
 // leap Motion Roll - Picth - Yaw 
