@@ -8,6 +8,10 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/style.css">   
+		<link rel="stylesheet" href="stylesheets/jquery-ui.css">
+		<link href="stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
+		<script src="js/leap-0.6.4.js"></script>
   </head>
   <body>
     <section class="page-header">
@@ -15,8 +19,84 @@
     </section>
 
     <section class="main-content">
-
-    </section>
+      <main>
+    		<section id="left">
+    		<div class="tempo-container"><div class="tempo"></div></div>
+    		<div class="load"></div>
+    		<div class="sync"></div>
+    		<div class="play"></div>
+    		<div class="less"></div>
+    		<div class="more"></div>
+    		<div class="jog paused">
+    		<div class="wave"></div>
+    		</div>
+    		<div class="volume-container"><div class="volume"></div></div>
+    		<div class="info">
+    			<div class="song"></div>
+    			<div class="info-time"></div>
+    			<div class="info-tempo"><span>TEMPO: </span><strong>±0.00<span> %</span></strong></div>
+    			<input type="range" min="0" max="0" value="0" step="1">
+    		</div>
+    		</section>
+    		
+    		<section id="right">
+    		<div class="tempo-container"><div class="tempo"></div></div>
+    		<div class="load"></div>
+    		<div class="sync"></div>
+    		<div class="play"></div>
+    		<div class="less"></div>
+    		<div class="more"></div>
+    		<div class="jog paused"></div>
+    		<div class="volume-container"><div class="volume"></div></div>
+    		<div class="info">
+    			<div class="song"></div>
+    			<div class="info-time"></div>
+    			<div class="info-tempo"><span>TEMPO: </span><strong>±0.00<span> %</span></strong></div>
+    			<input type="range" min="0" max="0" value="0" step="1">
+    		</div>
+    		</section>
+    
+    		<section id="crossfade-container">
+    		<section id="crossfade"></section>
+    		</section>
+    	</main>
+    	<div id="songloader-container">
+	    <section id="songloader">
+		  <table>
+		    <thead>
+			    <tr>
+  			    <th>Artist</th>
+  			    <th>Title</th>
+			    </tr>
+		    </thead>
+		  <tbody>
+			  <tr onclick="setSong(1)">
+			    <td>Kendrick Lamar</td>
+			    <td>Untitled2</td>
+			  </tr>
+			  <tr onclick="setSong(2)">
+			    <td>Kendrick Lamar</td>
+			    <td>TheseWalls</td>
+			  </tr>
+			  <tr onclick="setSong(3)">
+			    <td>Kendrick Lamar</td>
+			    <td>AlRight</td>
+			  </tr>
+			  <tr onclick="setSong(4)">
+			    <td>Kendrick Lamar</td>
+			    <td>King Kunta</td>
+			  </tr>
+		  </tbody>
+		</table>
+	  </section>
+	</div>
+	<div id="pause" class="container"></div>
+	<div id="out" class="container"></div>
+	<p id="log"></p>
+  <script src='js/jquery.min.js'></script>
+	<script src='js/jquery-ui.min.js'></script>
+  <script src="js/index.js"></script>
+  </section>
 
   
   </body>
