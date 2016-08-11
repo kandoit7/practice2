@@ -443,11 +443,12 @@ $('.palyback input').change(function() {
   if (leftSong != null) {
   	leftSong.currentTime = $(this).val();
   }
+  
   var now = leftSong.currentTime = $(this).val();
   if(leftSong.lastTimeStamp > now)
   	return;
   	
-  leftSong.lastBuffer += (now-leftSong.lastTimeStamp) * leftSong.lastPBR;
+  leftSong.lastBufferTime += (now-leftSong.lastTimeStamp) * leftSong.lastPBR;
   leftSong.lastPBR = $(this).val();
   leftSong.lastTimeStamp = now;
   
