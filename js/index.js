@@ -514,7 +514,6 @@ $('.palyback input').change(function() {
 	} else  // if I replace "now" with "0" below, Firefox works.
 	    leftSong.sourceNode.playbackRate.setValueAtTime( Math.abs(rate), now );
     leftSong.currentPlaybackRate = rate;
-    }
 });
 
 //
