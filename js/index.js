@@ -4,7 +4,7 @@ var timeFactor = 0.05;
 
 var song1 = new Audio('audio/Untitled2.mp3');
 var song2 = new Audio('audio/TheseWalls.mp3');
-var song3 = new Audio('audio/AlRight.mp3');
+var song3 = new Audio('audio/Alright.mp3');
 var song4 = new Audio('audio/KingKunta.mp3');
 
 var leftSong = null;
